@@ -1,13 +1,12 @@
 package br.com.welson.springboot.endpoint;
 
-import br.com.welson.springboot.error.CustomErrorType;
 import br.com.welson.springboot.error.ResourceNotFoundException;
 import br.com.welson.springboot.model.Student;
 import br.com.welson.springboot.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,8 +24,11 @@ public class StudentEndpoint {
 
     //@RequestMapping(method = RequestMethod.GET)
     @GetMapping
-    public ResponseEntity<?> listAll() {
-        return new ResponseEntity<>(studentDAO.findAll(), HttpStatus.OK);
+    public ResponseEntity<?> listAll(Pageable pageable) {
+        //?page=3&sort=field,desc
+        //?page=3&sort=field,asc
+        //?page=3&sort=field,asc&sort=otherField,desc
+        return new ResponseEntity<>(studentDAO.findAll(pageable), HttpStatus.OK);
     }
 
     //@RequestMapping(method = RequestMethod.GET, path = "/{id}")
@@ -44,7 +46,7 @@ public class StudentEndpoint {
         //studentDAO.save(student);
         //studentDAO.save(student);
         //if(true)
-         //   throw new RuntimeException("Test Transaction");
+        //   throw new RuntimeException("Test Transaction");
         return new ResponseEntity<>(studentDAO.save(student), HttpStatus.CREATED);
     }
 
@@ -70,7 +72,7 @@ public class StudentEndpoint {
     }
 
     private void verifyIfStudentExists(Long id) {
-        if(studentDAO.findOne(id) == null) {
+        if (studentDAO.findOne(id) == null) {
             throw new ResourceNotFoundException("Student not found for ID: " + id);
         }
     }
