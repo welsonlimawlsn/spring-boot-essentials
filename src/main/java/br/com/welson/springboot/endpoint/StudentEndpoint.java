@@ -7,12 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("students")
+@RequestMapping("v1")
 public class StudentEndpoint {
 
     private final StudentRepository studentDAO;
@@ -23,7 +26,7 @@ public class StudentEndpoint {
     }
 
     //@RequestMapping(method = RequestMethod.GET)
-    @GetMapping
+    @GetMapping(path = "/protected/students")
     public ResponseEntity<?> listAll(Pageable pageable) {
         //?page=3&sort=field,desc
         //?page=3&sort=field,asc
@@ -32,8 +35,9 @@ public class StudentEndpoint {
     }
 
     //@RequestMapping(method = RequestMethod.GET, path = "/{id}")
-    @GetMapping(path = "/{id}")
-    public ResponseEntity<?> getStudentById(@PathVariable("id") Long id) {
+    @GetMapping(path = "/protected/students/{id}")
+    public ResponseEntity<?> getStudentById(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails userDetails) {
+        System.out.println(userDetails);
         verifyIfStudentExists(id);
         Student student = studentDAO.findOne(id);
         return new ResponseEntity<>(student, HttpStatus.OK);
@@ -41,7 +45,7 @@ public class StudentEndpoint {
 
     //@RequestMapping(method = RequestMethod.POST)
     //@Transactional
-    @PostMapping
+    @PostMapping(path = "/admin/students")
     public ResponseEntity<?> save(@Valid @RequestBody Student student) {
         //studentDAO.save(student);
         //studentDAO.save(student);
@@ -51,7 +55,8 @@ public class StudentEndpoint {
     }
 
     //@RequestMapping(method = RequestMethod.DELETE)
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping(path = "/admin/students/{id}")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         verifyIfStudentExists(id);
         studentDAO.delete(id);
@@ -59,14 +64,14 @@ public class StudentEndpoint {
     }
 
     //@RequestMapping(method = RequestMethod.PUT)
-    @PutMapping
+    @PutMapping(path = "/admin/students")
     public ResponseEntity<?> update(@Valid @RequestBody Student student) {
         verifyIfStudentExists(student.getId());
         studentDAO.save(student);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(path = "/search/{name}")
+    @GetMapping(path = "/protected/students/findByName/{name}")
     public ResponseEntity<?> findStudentsByName(@PathVariable("name") String name) {
         return new ResponseEntity<>(studentDAO.findByNameIgnoreCaseContaining(name), HttpStatus.OK);
     }
