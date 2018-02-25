@@ -24,12 +24,13 @@ public class JavaClientDAO {
         return restTemplate.getForObject("/protected/students/{id}", Student.class, id);
     }
 
-    public List<Student> listAll(String pageAndSort){
+    public List<Student> listAll(String pageAndSort) {
         return restTemplate.exchange("/protected/students/" + pageAndSort, HttpMethod.GET, null,
-                new ParameterizedTypeReference<PageableResponse<Student>>() {}).getBody().getContent();
+                new ParameterizedTypeReference<PageableResponse<Student>>() {
+                }).getBody().getContent();
     }
 
-    public Student save(Student student){
+    public Student save(Student student) {
         return restTemplate.exchange("/admin/students/", HttpMethod.POST,
                 new HttpEntity<>(student, createJSONHeader()), Student.class).getBody();
     }

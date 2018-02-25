@@ -11,6 +11,7 @@ import java.net.*;
 
 public class JavaClientTest {
     public static void main(String[] args) {
+        //System.out.println(encodeUsernameAndPassword("welsonlimawlsn", "123456789"));
         HttpURLConnection connection = null;
         BufferedReader reader = null;
         String username = "welsonlimawlsn";
@@ -23,7 +24,7 @@ public class JavaClientTest {
             reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder jsonSB = new StringBuilder();
             String line;
-            while((line = reader.readLine()) != null){
+            while ((line = reader.readLine()) != null) {
                 jsonSB.append(line);
             }
             System.out.println(jsonSB);
@@ -31,11 +32,11 @@ public class JavaClientTest {
             e.printStackTrace();
         } finally {
             IOUtils.closeQuietly(reader);
-            if(connection != null) connection.disconnect();
+            if (connection != null) connection.disconnect();
         }
     }
 
-    public static String encodeUsernameAndPassword(String username, String password){
+    public static String encodeUsernameAndPassword(String username, String password) {
         String userPassword = username + ":" + password;
         return new String(Base64.encodeBase64(userPassword.getBytes()));
     }

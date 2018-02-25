@@ -15,8 +15,8 @@ public class CustomSortDeserializer extends JsonDeserializer<Sort> {
     public Sort deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         ArrayNode node = jsonParser.getCodec().readTree(jsonParser);
         Sort.Order[] orders = new Sort.Order[node.size()];
-        int i =0;
-        for(JsonNode jsonNode :node) {
+        int i = 0;
+        for (JsonNode jsonNode : node) {
             orders[i] = new Sort.Order(Sort.Direction.valueOf(jsonNode.get("direction").asText()),
                     jsonNode.get("property").asText());
             i++;

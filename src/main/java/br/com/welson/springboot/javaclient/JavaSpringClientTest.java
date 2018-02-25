@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class JavaSpringClientTest {
-//    public static void main(String[] args) {
+    //    public static void main(String[] args) {
 //        RestTemplate restTemplate = new RestTemplateBuilder()
 //                .rootUri("http://localhost:8080/v1/protected/students")
 //                .basicAuthorization("welsonlimawlsn","123456789")
@@ -52,19 +52,21 @@ public class JavaSpringClientTest {
 
     }
 
-    private static void get(){
+    private static void get() {
         RestTemplate restTemplate = new RestTemplateBuilder()
                 .rootUri("http://localhost:8080/v1/protected/students")
-                .basicAuthorization("welsonlimawlsn","123456789")
+                .basicAuthorization("welsonlimawlsn", "123456789")
                 .build();
         //Student student = restTemplate.getForObject("/{id}", Student.class, 4);
         //ResponseEntity<Student> forEntity = restTemplate.getForEntity("/{id}", Student.class, 4);
         ResponseEntity<PageableResponse<Student>> listResponseEntity = restTemplate
-                .exchange("/?sort=id,desc", HttpMethod.GET, null, new ParameterizedTypeReference<PageableResponse<Student>>() {});
+                .exchange("/?sort=id,desc", HttpMethod.GET, null, new ParameterizedTypeReference<PageableResponse<Student>>() {
+                });
         System.out.println(listResponseEntity);
         System.out.println(listResponseEntity.getBody().getContent());
     }
-    private static void post(){
+
+    private static void post() {
         RestTemplate restTemplate = new RestTemplateBuilder()
                 .rootUri("http://localhost:8080/v1/admin/students")
                 .basicAuthorization("welsonlimawlsn", "123456789")
@@ -78,7 +80,7 @@ public class JavaSpringClientTest {
         System.out.println(exchangePost);
     }
 
-    private static void post2(){
+    private static void post2() {
         RestTemplate restTemplate = new RestTemplateBuilder()
                 .rootUri("http://localhost:8080/v1/admin/students")
                 .basicAuthorization("welsonlimawlsn", "123456789")
@@ -92,7 +94,7 @@ public class JavaSpringClientTest {
         System.out.println(postForObject);
     }
 
-    private static HttpHeaders createJSONHeader(){
+    private static HttpHeaders createJSONHeader() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return headers;

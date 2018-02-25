@@ -16,6 +16,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("v1")
+@CrossOrigin(origins = "http://localhost:8080/")
 public class StudentEndpoint {
 
     private final StudentRepository studentDAO;

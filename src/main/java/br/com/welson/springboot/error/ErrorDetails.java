@@ -8,7 +8,6 @@ public class ErrorDetails {
     protected String developerMessage;
 
 
-
     public String getTitle() {
         return title;
     }
